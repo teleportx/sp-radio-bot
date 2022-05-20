@@ -10,5 +10,7 @@ Invite bot - https://discord.com/api/oauth2/authorize?client_id=9769133132817490
 Bot prefix - !;
 
 COMMANDS
+
 !;play - start playing SP radio
+
 !;leave - disconnect bot from the channel
