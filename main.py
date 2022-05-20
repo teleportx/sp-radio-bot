@@ -24,6 +24,7 @@ client = commands.Bot(command_prefix=cfg.command_prefix)
 @client.event
 async def on_ready():
     print('Bot started')
+    print('guilds' + str(client.guilds))
 
 
 @client.event
