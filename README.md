@@ -13,14 +13,15 @@ A discord bot that broadcasts Internet radio SP radio
 
 # COMMANDS
 
-!;play - start playing SP radio
+/sprplay - start playing SP radio
+- !;join
+- !;play
 - !;p
 - !;j
-- !;join
-- /sprplay
 
-!;stop - disconnect bot from the channel
-- !;l
+
+/sprstop - disconnect bot from the channel
 - !;leave
+- !;stop
 - !;s
-- /sprstop
+- !;l
