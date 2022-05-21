@@ -58,7 +58,7 @@ async def on_voice_state_update(member, before, after):
             await before.channel.guild.voice_client.disconnect()
 
 
-@client.command(pass_context=True)
+@client.command(pass_context=True, aliases=['join', 'p', 'j'])
 async def play(ctx):
     await ctx.message.delete()
 
@@ -85,7 +85,7 @@ async def play(ctx):
         await notify.delete()
 
 
-@client.command(pass_context=True)
+@client.command(pass_context=True, aliases=['leave', 'l', 's'])
 async def stop(ctx):
     await ctx.message.delete()
 
@@ -101,37 +101,6 @@ async def stop(ctx):
         notify = await ctx.send('Вы не находитесь в канале в котором играет бот')
         await asyncio.sleep(cfg.notify_time_auto_delete)
         await notify.delete()
-
-
-# aliases
-@client.command(pass_context=True)
-async def leave(ctx):
-    await stop(ctx)
-
-
-@client.command(pass_context=True)
-async def s(ctx):
-    await stop(ctx)
-
-
-@client.command(pass_context=True)
-async def l(ctx):
-    await stop(ctx)
-
-
-@client.command(pass_context=True)
-async def join(ctx):
-    await play(ctx)
-
-
-@client.command(pass_context=True)
-async def p(ctx):
-    await play(ctx)
-
-
-@client.command(pass_context=True)
-async def j(ctx):
-    await play(ctx)
 
 
 client.run(TOKEN.TOKEN)
