@@ -17,7 +17,6 @@ import requests
 from discord.ext import commands
 import asyncio
 from dislash import InteractionClient
-import dislash
 
 import TOKEN
 import config
