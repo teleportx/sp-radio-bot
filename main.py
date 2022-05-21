@@ -12,18 +12,42 @@ A discord bot that broadcasts Internet radio SP radio
 """
 
 import discord
+from bs4 import BeautifulSoup
+import requests
 from discord.ext import commands
 import asyncio
 
 import TOKEN
+import config
 import config as cfg
 
 client = commands.Bot(command_prefix=cfg.command_prefix)
+last_song = ''
+
+
+async def change_activity():
+    global last_song
+
+    try:
+        html_getter = requests.get(config.radio_parameters_url)
+        html_getter.encoding = 'utf-8'
+        page = BeautifulSoup(html_getter.text, 'xml')
+        song = page.find_all('tr')[10].find('td', {'class': 'streamdata'}).text
+
+        if song != last_song:
+            last_song = song
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=song))
+
+    except requests.exceptions.ConnectionError:
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='СП Радио'))
 
 
 @client.event
 async def on_ready():
     print('Bot started')
+    while True:
+        await change_activity()
+        await asyncio.sleep(config.radio_request_song_time)
 
 
 @client.event
@@ -62,7 +86,7 @@ async def play(ctx):
 
 
 @client.command(pass_context=True)
-async def leave(ctx):
+async def stop(ctx):
     await ctx.message.delete()
 
     if ctx.voice_client is None:
@@ -77,6 +101,37 @@ async def leave(ctx):
         notify = await ctx.send('Вы не находитесь в канале в котором играет бот')
         await asyncio.sleep(cfg.notify_time_auto_delete)
         await notify.delete()
+
+
+# aliases
+@client.command(pass_context=True)
+async def leave(ctx):
+    await stop(ctx)
+
+
+@client.command(pass_context=True)
+async def s(ctx):
+    await stop(ctx)
+
+
+@client.command(pass_context=True)
+async def l(ctx):
+    await stop(ctx)
+
+
+@client.command(pass_context=True)
+async def join(ctx):
+    await play(ctx)
+
+
+@client.command(pass_context=True)
+async def p(ctx):
+    await play(ctx)
+
+
+@client.command(pass_context=True)
+async def j(ctx):
+    await play(ctx)
 
 
 client.run(TOKEN.TOKEN)
