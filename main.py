@@ -16,6 +16,8 @@ from bs4 import BeautifulSoup
 import requests
 from discord.ext import commands
 import asyncio
+from dislash import InteractionClient
+import dislash
 
 import TOKEN
 import config
@@ -23,6 +25,7 @@ import config as cfg
 
 client = commands.Bot(command_prefix=cfg.command_prefix)
 last_song = ''
+inter_client = InteractionClient(client)
 
 
 async def change_activity():
@@ -93,11 +96,69 @@ async def stop(ctx):
         notify = await ctx.send('Бот ни находится в каком либо канале')
         await asyncio.sleep(cfg.notify_time_auto_delete)
         await notify.delete()
+        return
 
-    elif ctx.voice_client and ctx.author.voice.channel == ctx.voice_client.channel:
+    elif ctx.author.voice.channel == ctx.voice_client.channel:
+        ctx.guild.voice_client.stop()
         await ctx.guild.voice_client.disconnect()
 
     elif ctx.author.voice.channel != ctx.voice_client.channel:
+        notify = await ctx.send('Вы не находитесь в канале в котором играет бот')
+        await asyncio.sleep(cfg.notify_time_auto_delete)
+        await notify.delete()
+
+
+@inter_client.slash_command(description="Включает сп радио")
+async def sprplay(ctx):
+
+    try:
+        channel = client.get_channel(ctx.author.voice.channel.id)
+        channel = await channel.connect()
+
+    except AttributeError:
+        pass
+
+    except discord.errors.ClientException:
+        notify = await ctx.send('Бот уже находится в канале')
+        await asyncio.sleep(cfg.notify_time_auto_delete)
+        await notify.delete()
+        return
+
+    if ctx.guild.voice_client:
+        source = discord.FFmpegPCMAudio(cfg.radio_url)
+        channel.play(source)
+        notify = await ctx.send('Включаемся')
+        await asyncio.sleep(cfg.notify_time_auto_delete)
+        await notify.delete()
+
+    else:
+        notify = await ctx.send('Вы не находитесь в каком либо канале')
+        await asyncio.sleep(cfg.notify_time_auto_delete)
+        await notify.delete()
+
+
+@inter_client.slash_command(description="Выключает сп радио")
+async def sprstop(ctx):
+    try:
+        if ctx.guild.voice_client is None:
+            notify = await ctx.send('Бот ни находится в каком либо канале')
+            await asyncio.sleep(cfg.notify_time_auto_delete)
+            await notify.delete()
+            return
+
+        elif ctx.author.voice.channel == ctx.guild.voice_client.channel:
+            ctx.guild.voice_client.stop()
+            await ctx.guild.voice_client.disconnect()
+            notify = await ctx.send('Отключаемся...')
+            await asyncio.sleep(cfg.notify_time_auto_delete)
+            await notify.delete()
+
+        elif ctx.author.voice.channel != ctx.guild.voice_client.channel:
+            notify = await ctx.send('Вы не находитесь в канале в котором играет бот')
+            await asyncio.sleep(cfg.notify_time_auto_delete)
+            await notify.delete()
+
+    except AttributeError:
         notify = await ctx.send('Вы не находитесь в канале в котором играет бот')
         await asyncio.sleep(cfg.notify_time_auto_delete)
         await notify.delete()
