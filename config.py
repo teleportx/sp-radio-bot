@@ -3,3 +3,4 @@ radio_url = 'https://radio.uuuuuno.net/radio/8000/radio.mp3'  # адрес ра�
 radio_parameters_url = 'https://radio.uuuuuno.net/radio/8000'
 notify_time_auto_delete = 5  # Время после которого сообщения уведомления будут удаляться
 radio_request_song_time = 5
+notify_help_time_auto_delete = 30

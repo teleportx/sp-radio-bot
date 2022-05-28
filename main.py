@@ -22,7 +22,7 @@ import TOKEN
 import config
 import config as cfg
 
-client = commands.Bot(command_prefix=cfg.command_prefix)
+client = commands.Bot(command_prefix=cfg.command_prefix, help_command=None)
 last_song = ''
 inter_client = InteractionClient(client)
 
@@ -53,6 +53,16 @@ async def on_ready():
 
 
 @client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.message.delete()
+        notify = await ctx.send('Данной команды не существует.')
+
+        await asyncio.sleep(cfg.notify_time_auto_delete)
+        await notify.delete()
+
+
+@client.event
 async def on_voice_state_update(member, before, after):
     if before.channel is not None and after.channel is None:
         if before.channel.guild.voice_client and len(before.channel.members) == 1:
@@ -69,6 +79,9 @@ async def play(ctx):
         channel = await channel.connect()
 
     except AttributeError:
+        pass
+
+    except asyncio.exceptions.TimeoutError:
         pass
 
     except discord.errors.ClientException:
@@ -107,14 +120,28 @@ async def stop(ctx):
         await notify.delete()
 
 
+@client.command(pass_context=True, aliases=['help', 'h'])
+async def help_command(ctx):
+    await ctx.message.delete()
+
+    embed = discord.Embed(title="Команды")
+    embed.add_field(name="Оставновить воспроизведение", value="/sprstop\n!;leave\n!;stop\n!;s\n!;l", inline=False)
+    embed.add_field(name="Включить воспроизведение", value="/sprplay\n!;join\n!;play\n!;p\n!;j", inline=True)
+    notify = await ctx.send(embed=embed)
+    await asyncio.sleep(cfg.notify_help_time_auto_delete)
+    await notify.delete()
+
+
 @inter_client.slash_command(description="Включает сп радио")
 async def sprplay(ctx):
-
     try:
         channel = client.get_channel(ctx.author.voice.channel.id)
         channel = await channel.connect()
 
     except AttributeError:
+        pass
+
+    except asyncio.exceptions.TimeoutError:
         pass
 
     except discord.errors.ClientException:
