@@ -14,12 +14,13 @@ A discord bot that broadcasts Internet radio SP radio
 import discord
 from bs4 import BeautifulSoup
 import requests
-from discord.ext import commands
+from discord.ext import commands, tasks
+import platform
+import os
 import asyncio
 from dislash import InteractionClient
 
 import TOKEN
-import config
 import config as cfg
 
 client = commands.Bot(command_prefix=cfg.command_prefix, help_command=None)
@@ -31,7 +32,7 @@ async def change_activity():
     global last_song
 
     try:
-        html_getter = requests.get(config.radio_parameters_url)
+        html_getter = requests.get(cfg.radio_parameters_url)
         html_getter.encoding = 'utf-8'
         page = BeautifulSoup(html_getter.text, 'xml')
         song = page.find_all('tr')[10].find('td', {'class': 'streamdata'}).text
@@ -46,10 +47,30 @@ async def change_activity():
 
 @client.event
 async def on_ready():
-    print('Bot started')
-    while True:
-        await change_activity()
-        await asyncio.sleep(config.radio_request_song_time)
+    print('<-------Bot started------->')
+    print(f"Logged in as {client.user.name}")
+    print(f"Python version: {platform.python_version()}")
+    print(f"Running on: {platform.system()} {platform.release()} ({os.name})")
+
+    change_activity.start()
+
+
+@tasks.loop(seconds=cfg.radio_request_song_time)
+async def change_activity():
+    global last_song
+
+    try:
+        html_getter = requests.get(cfg.radio_parameters_url)
+        html_getter.encoding = 'utf-8'
+        page = BeautifulSoup(html_getter.text, 'xml')
+        song = page.find_all('tr')[10].find('td', {'class': 'streamdata'}).text
+
+        if song != last_song:
+            last_song = song
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=song))
+
+    except requests.exceptions.ConnectionError:
+        await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='СП Радио'))
 
 
 @client.event
