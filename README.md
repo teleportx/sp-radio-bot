@@ -1,23 +1,25 @@
-# sp-radio-bot
-A discord bot that broadcasts Internet radio SP radio
+# SP radio bot
+An official discord bot that broadcasts Internet radio SP radio
 
-**In order for the bot to work correctly, it needs either administrator rights or a manually set right to speak and connect in the voice channel**
-[Link if you want to configure everything yourself](https://discord.com/api/oauth2/authorize?client_id=976913313281749012&permissions=70315072&scope=bot%20applications.commands)
 
-[Link if you are too lazy (requires admin)](https://discord.com/api/oauth2/authorize?client_id=976913313281749012&permissions=8&scope=bot%20applications.commands) 
+### Links
 
+[Invite to server](https://discord.com/api/oauth2/authorize?client_id=976913313281749012&permissions=8&scope=bot%20applications.commands)
+
+[Official discord server SP radio](https://discord.gg/6cfRWkyyRS)
+
+[SP radio on spworlds](https://spworlds.ru/radio)
+
+[SP radio news on spworlds](spworlds.ru/sp/groups/9eeea12c-8e6d-48ec-91f9-08ce282a7fcd)
 
 # COMMANDS
 
-/sprplay - start playing SP radio
-- !;join
-- !;play
-- !;p
-- !;j
+`/spradio play` - start playing SP radio
 
+`/spradio stop` - disconnect bot from the channel
 
-/sprstop - disconnect bot from the channel
-- !;leave
-- !;stop
-- !;s
-- !;l
+`/spradio now` - display information about now playing song
+
+`/spradio info radio` - display information about SP radio
+
+`/spradio report_new_song` - you can report new song created by SP community and this song will most likely be added to the SP radio
