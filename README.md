@@ -10,7 +10,7 @@ An official discord bot that broadcasts Internet radio SP radio
 
 [SP radio on spworlds](https://spworlds.ru/radio)
 
-[SP radio news on spworlds](spworlds.ru/sp/groups/9eeea12c-8e6d-48ec-91f9-08ce282a7fcd)
+[SP radio news on spworlds](https://spworlds.ru/sp/groups/3dbe5dad-3c41-43f9-bf83-f4ba712bc0ae)
 
 # COMMANDS
 
