@@ -133,3 +133,5 @@ dmypy.json
 
 # logs directory
 logs
+
+test.py

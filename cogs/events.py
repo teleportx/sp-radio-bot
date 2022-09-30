@@ -20,7 +20,7 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if before.channel is not None and after.channel is None and self.bot.user in before.channel.members:
+        if before.channel != after.channel and self.bot.user in before.channel.members:
             if before.channel.guild.voice_client and len(before.channel.members) == 1:
                 before.channel.guild.voice_client.stop()
                 await before.channel.guild.voice_client.disconnect()
