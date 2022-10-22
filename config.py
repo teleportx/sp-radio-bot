@@ -39,3 +39,7 @@ class Database:
     password = environ.get('DB_PASSWORD')
 
     database = 'spradio'
+
+
+class PasteBin:
+    key = environ.get('PASTEBIN_KEY')

@@ -1,4 +1,5 @@
 import datetime
+import io
 
 import psycopg2
 from nextcord import Interaction, slash_command, SlashOption, Embed, message_command
@@ -6,6 +7,7 @@ from nextcord.ext.commands import Bot, Cog
 import nextcord
 
 import config as cfg
+from functions.create_paste import create_paste
 from sprapi.api import SPRadioApi
 
 from functions.playback_control import play_song, stop_song
@@ -117,18 +119,15 @@ class Commands(Cog):
 
             await inter.send(embed=embed, view=UpdateRadioInformationButtonView(), ephemeral=True)
 
-        if choise == 1:
+        elif choise == 1:
             if inter.user.id not in cfg.Discord.admin_ids:
                 await inter.send('У вас нет прав для выполнения этого действия', ephemeral=True)
                 return
 
             mutual_guilds = inter.user.mutual_guilds
 
-            guilds = self.bot.guilds
-            guilds_text = f'**{guilds[0].name}**' if guilds[0] in mutual_guilds else f', {guilds[0].name}'
-            guilds.pop(0)
-            for guild in guilds:
-                guilds_text += f', **{guild.name}**' if guild in mutual_guilds else f', {guild.name}'
+            guilds = [guild.name for guild in self.bot.guilds]
+            guilds_text = '\n'.join(guilds)
 
             total_users = 0
             for guild in self.bot.guilds:
@@ -140,6 +139,10 @@ class Commands(Cog):
             for voice_client in self.bot.voice_clients:
                 total_listeners += len(voice_client.channel.members) - 1
 
+            mutual_guilds_text = [guild.name for guild in mutual_guilds]
+
+            guilds_url = create_paste(guilds_text)
+
             embed = Embed(title='Информация о SPradio бот')
 
             embed.set_thumbnail('https://radio.uuuuuno.net/static/uploads/browser_icon/192.1653387216.png')
@@ -148,11 +151,14 @@ class Commands(Cog):
             embed.add_field(name='Общее количество серверов', value=len(self.bot.guilds))
             embed.add_field(name='Текущее количество каналов слушателей бота', value=len(self.bot.voice_clients))
             embed.add_field(name='Текущее количество слушателей бота', value=total_listeners)
-            embed.add_field(name='Сервера', value=guilds_text, inline=False)
+            embed.add_field(name='Общие сервера', value=' ,'.join(mutual_guilds_text), inline=False)
+            embed.add_field(name='Все сервера бота', value=f'||{guilds_url}||')
 
             await inter.send(
                 '**Настоятельная просьба не распростронять информацию представленную ниже не доверенным лицам**',
-                embed=embed, ephemeral=True)
+                embed=embed,
+                ephemeral=True)
+
 
     @spradio.subcommand()
     async def admin(self):
