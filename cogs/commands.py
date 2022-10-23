@@ -1,5 +1,4 @@
 import datetime
-import io
 
 import psycopg2
 from nextcord import Interaction, slash_command, SlashOption, Embed, message_command
