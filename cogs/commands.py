@@ -150,7 +150,7 @@ class Commands(Cog):
             embed.add_field(name='Общее количество серверов', value=len(self.bot.guilds))
             embed.add_field(name='Текущее количество каналов слушателей бота', value=len(self.bot.voice_clients))
             embed.add_field(name='Текущее количество слушателей бота', value=total_listeners)
-            embed.add_field(name='Общие сервера', value=' ,'.join(mutual_guilds_text), inline=False)
+            embed.add_field(name='Общие сервера', value=', '.join(mutual_guilds_text), inline=False)
             embed.add_field(name='Все сервера бота', value=f'||{guilds_url}||')
 
             await inter.send(
