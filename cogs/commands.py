@@ -23,22 +23,8 @@ class Commands(Cog):
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
 
-    @message_command
-    async def eldaradio(self, inter: Interaction, message: nextcord.Message):
-        if await check_ban(inter.user.id):
-            await inter.send(cfg.Radio.ban_video_url, ephemeral=True)
-            return
-        await play_song(inter, cfg.Radio.eldaradio_stream_url)
-
-    @message_command
-    async def uuuuunoradio(self, inter: Interaction, message: nextcord.Message):
-        if await check_ban(inter.user.id):
-            await inter.send(cfg.Radio.ban_video_url, ephemeral=True)
-            return
-        await play_song(inter, cfg.Radio.uuuuunoradio_stream_url)
-
     @slash_command(description='SP radio')
-    async def spradio(self):
+    async def spradio(self, inter: Interaction):
         pass
 
     @spradio.subcommand(description="Запустить воспроизведение")
@@ -160,7 +146,7 @@ class Commands(Cog):
 
 
     @spradio.subcommand()
-    async def admin(self):
+    async def admin(self, inter: Interaction):
         pass
 
     @admin.subcommand(description='Ban user in bot SP radio')

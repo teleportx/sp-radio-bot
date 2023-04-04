@@ -20,7 +20,10 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if before.channel != after.channel and self.bot.user in before.channel.members:
+        if (before.channel is not None and after is None) or (before.channel != after.channel):
+            if before.channel is None:
+                return
+
             if before.channel.guild.voice_client and len(before.channel.members) == 1:
                 before.channel.guild.voice_client.stop()
                 await before.channel.guild.voice_client.disconnect()
@@ -28,6 +31,7 @@ class Events(commands.Cog):
             members_bots = []
             for user in before.channel.members:
                 if not user.bot:
+                    members_bots = []
                     break
 
                 members_bots.append(True)
@@ -39,8 +43,6 @@ class Events(commands.Cog):
 
                 except:
                     pass
-
-
 
 
 def setup(bot: commands.Bot):

@@ -7,18 +7,16 @@ db = None
 
 
 class Radio:
-    spradio_stream_url = 'https://radio.uuuuuno.net/radio/8000/radio.mp3'
-    eldaradio_stream_url = 'http://emgspb.hostingradio.ru/eldoradio128.mp3'
-    uuuuunoradio_stream_url = 'http://radio.uuuu.uno/listen/unoradio/radio.mp3'
+    spradio_stream_url = 'https://radio.spworlds.city/listen/spradio/radio.mp3'
     bear_theme_stream_url = 'tema-medvedya.mp3'
 
     ban_video_url = 'https://www.youtube.com/watch?v=XeoS-zsGVCs'
 
-    spradio_icon_url = 'https://radio.uuuuuno.net/static/uploads/browser_icon/192.1653387216.png'
+    spradio_icon_url = 'https://radio.spworlds.city/static/uploads/browser_icon/192.1653387216.png'
 
 
 class Discord:
-    TOKEN = environ.get('TOKEN')
+    TOKEN = environ.get('DEBUG_TOKEN')
 
     command_prefix = '!;'
 

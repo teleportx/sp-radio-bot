@@ -34,7 +34,7 @@ intents = nextcord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-last_song = None
+last_song = ''
 
 logger.setup()
 

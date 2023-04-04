@@ -10,7 +10,7 @@ from sprapi.api import SPRadioApi
 async def play_song(inter: Interaction, stream_path: str = cfg.Radio.spradio_stream_url):
     try:
         channel = inter.user.voice.channel
-        voice_client: nextcord.VoiceClient = await channel.connect()
+        voice_client: nextcord.VoiceClient = await channel.connect(reconnect=False)
 
     except AttributeError:
         pass
@@ -29,9 +29,6 @@ async def play_song(inter: Interaction, stream_path: str = cfg.Radio.spradio_str
             if stream_path == cfg.Radio.bear_theme_stream_url:
                 await inter.send('Босс, переподключаемся к вам с песней `Тема Медведя` *Вам тю пиливудупай*',
                                  ephemeral=True)
-
-            elif stream_path == cfg.Radio.eldaradio_stream_url:
-                await inter.send('Босс, переподключаемся к вам c **ЭльдаРадио**', ephemeral=True)
 
             else:
                 await inter.send(f'Босс, переподключаемся к вам с песней `{song.full_title}`', ephemeral=True)
@@ -69,11 +66,6 @@ async def play_song(inter: Interaction, stream_path: str = cfg.Radio.spradio_str
             await inter.send(
                 'Босс, включаемся с песней `Тема Медведя` *Вам тю пиливудупай*' if inter.user.id in cfg.Discord.admin_ids
                 else 'Включаемся с песней `Тема Медведя` *Вам тю пиливудупай*', ephemeral=True)
-
-        elif stream_path == cfg.Radio.eldaradio_stream_url:
-            await inter.send(
-                'Босс, включаем **ЭльдаРадио**' if inter.user.id in cfg.Discord.admin_ids
-                else 'Включаем **ЭльдаРадио**', ephemeral=True)
 
         else:
             api = SPRadioApi()
