@@ -16,7 +16,7 @@ class Radio:
 
 
 class Discord:
-    TOKEN = environ.get('DEBUG_TOKEN')
+    TOKEN = environ.get('TOKEN')
 
     command_prefix = '!;'
 

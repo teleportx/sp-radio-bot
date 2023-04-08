@@ -29,7 +29,7 @@ class Database:
 
         self.connection.close()
 
-        cfg.Discord.bans.append((user_id, reason))
+        cfg.Discord.bans.append(user_id)
 
     def get_bans(self) -> list:
         self.connect()
@@ -44,6 +44,9 @@ class Database:
     def delete_ban(self, user_id: str):
         self.connect()
 
-        self.cursor.execute(f"DELETE FROM public.bans WHERE user_id='{user_id}'")
+        self.cursor.execute(f"DELETE FROM public.bans WHERE user_id='{user_id}';")
+        self.connection.commit()
 
         self.connection.close()
+
+        cfg.Discord.bans.pop(cfg.Discord.bans.index(user_id))
